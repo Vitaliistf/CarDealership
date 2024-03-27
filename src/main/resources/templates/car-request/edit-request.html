@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit request</title>
+</head>
+<body class="gradient-custom">
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+<form th:method="POST" th:action="@{/car-request/{id}/edit(id=${carRequest.id})}" th:object="${carRequest}"
+      class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-9">
+            <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+                    <div class="mb-md-5 mt-md-4">
+                        <h2 class="fw-bold mb-2 text-uppercase">Edit car request</h2>
+                        <p class="text-white-50 mb-5">Fill in details below. Use slider to input importance of certain
+                            criteria</p>
+                    </div>
+                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger col-6 mx-auto">
+                        <p>Please correct the following errors:</p>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="brand" class="form-label">Brand:</label>
+                            <input type="text" th:field="*{brand}" class="form-control" id="brand">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="brandWeight" class="form-label">Brand Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="brandWeight" th:field="*{brandWeight}" type="range" min="0" max="10"
+                                       value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="model" class="form-label">Model:</label>
+                            <input type="text" class="form-control" id="model" th:field="*{model}"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="modelWeight" class="form-label">Model Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="modelWeight" th:field="*{modelWeight}" type="range" min="0" max="10"
+                                       value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="year" class="form-label">Year:</label>
+                            <input type="number" class="form-control" id="year" th:field="*{year}"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="yearWeight" class="form-label">Year Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="yearWeight" th:field="*{yearWeight}" type="range" min="0" max="10"
+                                       value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="color" class="form-label">Color:</label>
+                            <input type="text" class="form-control" id="color" th:field="*{color}"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="colorWeight" class="form-label">Color Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="colorWeight" th:field="*{colorWeight}" type="range" min="0" max="10"
+                                       value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="transmission" class="form-label">Transmission:</label>
+                            <select class="form-select" id="transmission" th:field="*{transmission}">
+                                <option th:each="t : ${T(org.vitaliistf.cardealership.data.enums.Transmission).values()}"
+                                        th:value="${t}" th:text="${t}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="transmissionWeight" class="form-label">Transmission Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="transmissionWeight" th:field="*{transmissionWeight}" type="range" min="0"
+                                       max="10" value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="fuel" class="form-label">Fuel:</label>
+                            <select class="form-select" id="fuel" th:field="*{fuelType}">
+                                <option th:each="f : ${T(org.vitaliistf.cardealership.data.enums.FuelType).values()}"
+                                        th:value="${f}" th:text="${f}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fuelWeight" class="form-label">Fuel Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="fuelWeight" th:field="*{fuelWeight}" type="range" min="0" max="10"
+                                       value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="bodyType" class="form-label">Body type:</label>
+                            <select class="form-select" id="bodyType" th:field="*{bodyType}">
+                                <option th:each="t : ${T(org.vitaliistf.cardealership.data.enums.BodyType).values()}"
+                                        th:value="${t}" th:text="${t}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="bodyTypeWeight" class="form-label">Body type weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="bodyTypeWeight" th:field="*{bodyTypeWeight}" type="range" min="0" max="10"
+                                       value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="engineDisplacement" class="form-label">Engine Displacement:</label>
+                            <input type="number" class="form-control" id="engineDisplacement"
+                                   th:field="*{engineDisplacement}" step=".01"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="engineDisplacementWeight" class="form-label">Engine Displacement
+                                Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="engineDisplacementWeight" th:field="*{engineDisplacementWeight}"
+                                       type="range" min="0" max="10" value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="mileage" class="form-label">Max Mileage:</label>
+                            <input type="number" class="form-control" id="mileage" th:field="*{maxMileage}"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="mileageWeight" class="form-label">Max Mileage Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="mileageWeight" th:field="*{maxMileageWeight}" type="range" min="0"
+                                       max="10" value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="maxPrice" class="form-label">Max Price:</label>
+                            <input type="number" class="form-control" id="maxPrice" th:field="*{maxPrice}"
+                                   step="0.01"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="maxPriceWeight" class="form-label">Max Price Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="maxPriceWeight" th:field="*{maxPriceWeight}" type="range" min="0"
+                                       max="10" value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="condition" class="form-label">Condition:</label>
+                            <select class="form-select" id="condition" th:field="*{condition}">
+                                <option th:each="c : ${T(org.vitaliistf.cardealership.data.enums.TechnicalCondition).values()}"
+                                        th:value="${c}" th:text="${c}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="conditionWeight" class="form-label">Condition Weight:</label>
+                            <div class="d-flex justify-content-between">
+                                <span>Unimportant</span>
+                                <input id="conditionWeight" th:field="*{conditionWeight}" type="range" min="0"
+                                       max="10" value="5" class="form-range mx-3"/>
+                                <span>Important</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-light btn-lg px-5 mt-4">Edit request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

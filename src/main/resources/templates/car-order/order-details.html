@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Order Details</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-5">
+    <div class="details-card">
+        <h2>Order details</h2>
+
+        <p><strong>Order ID:</strong> <span th:text="${order.id}"></span></p>
+        <p><strong>Order date:</strong> <span th:text="${order.orderDate}"></span></p>
+        <p><strong>Order status:</strong> <span th:text="${order.orderStatus}"></span></p>
+
+        <h3 class="mt-5">Seller details:</h3>
+        <p><strong>Name:</strong> <span th:text="${order.seller.getFullName()}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${order.seller.email}"></span></p>
+        <p><strong>Phone number:</strong> <span th:text="${order.seller.phoneNumber}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${order.seller.address}"></span></p>
+
+        <h3 class="mt-5">Buyer details:</h3>
+        <p><strong>Name:</strong> <span th:text="${order.buyer.getFullName()}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${order.buyer.email}"></span></p>
+        <p><strong>Phone number:</strong> <span th:text="${order.buyer.phoneNumber}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${order.buyer.address}"></span></p>
+
+        <h3 class="mt-5">Car details:</h3>
+        <a class="btn btn-outline-dark" th:href="@{/car/{id}(id=${order.car.getId()})}">Car details</a>
+
+        <h3 class="mt-5">Actions:</h3>
+        <div style="display: flex;">
+            <a th:href="@{/car-order/{id}/pdf(id=${order.id})}" class="btn btn-dark me-2">
+                <i class="bi bi-filetype-pdf"></i> Generate PDF receipt
+            </a>
+            <a th:href="@{/car-order/{id}/txt(id=${order.id})}" class="btn btn-dark me-2">
+                <i class="bi bi-filetype-txt"></i> Generate txt receipt
+            </a>
+            <form th:if="${order.buyer.id} == ${#authentication.principal.user.id} and
+                  ${order.orderStatus.toString() == 'CONFIRMED'}"
+                  th:method="POST"
+                  th:action="@{/car-order/{id}/complete(id=${order.id})}">
+                <button class="btn btn-outline-dark me-2" type="submit"><i class="bi bi-check"></i> Complete</button>
+            </form>
+
+            <form th:if="${order.seller.id == #authentication.principal.user.id and
+                  order.orderStatus.toString() == 'NEW'}"
+                  th:method="POST"
+                  th:action="@{/car-order/{id}/confirm(id=${order.id})}">
+                <button class="btn btn-outline-dark me-2" type="submit"><i class="bi bi-check"></i> Confirm</button>
+            </form>
+
+            <form id="cancelForm" th:if="${order.buyer.id == #authentication.principal.user.id or
+            order.seller.id == #authentication.principal.user.id}" th:method="POST"
+                  th:action="@{/car-order/{id}/cancel(id=${order.id})}" data-bs-toggle="modal"
+                  data-bs-target="#cancelModal">
+                <button class="btn btn-outline-danger" type="button"><i class="bi bi-trash"></i> Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Confirm cancellation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel this order?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg"></i> Exit
+                </button>
+                <button type="submit" class="btn btn-danger" form="cancelForm">
+                    <i class="bi bi-trash"></i> Cancel order
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.2/dist/js/bootstrap.bundle.js}"></script>
+<script>
+    const cancelModal = document.getElementById('cancelModal');
+    cancelModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const cancelForm = document.getElementById('cancelForm');
+        cancelForm.addEventListener('submit', function () {
+            button.setAttribute('data-bs-dismiss', 'modal');
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User details</title>
+</head>
+<body>
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-5">
+    <div class="details-card">
+        <h2>User details</h2>
+        <p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
+        <p><strong>First name:</strong> <span th:text="${user.firstName}"></span></p>
+        <p><strong>Last name:</strong> <span th:text="${user.lastName}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+        <p><strong>Phone number:</strong> <span th:text="${user.phoneNumber}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${user.address}"></span></p>
+        <a th:href="@{/user/{userId}/edit(userId=${user.id})}" class="btn btn-outline-dark">
+            <i class="bi bi-pencil"></i> Edit
+        </a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+
+    <!--TODO: maybe do something about is-->
+    <style>
+        .no-info-block {
+            min-height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
+<div class="no-info-block">
+    <div class="text-center">
+        <p class="fw-bold text-danger">Oops!</p>
+        <h1 th:text="${status}" class="display-1 fw-bold"></h1>
+        <p th:text="${error}" class="fs-3"></p>
+        <p th:text="${message}" class="lead"></p>
+        <a href="/" class="btn btn-outline-dark">Home</a>
+    </div>
+</div>
+</body>
+</html>

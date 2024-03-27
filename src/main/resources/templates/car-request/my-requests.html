@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My requests</title>
+</head>
+<body>
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">My car requests</h2>
+        <a th:href="@{/car-request/create}" class="btn btn-dark mb-3">
+            <i class="bi bi-plus-circle"></i> Add car request
+        </a>
+    </div>
+
+    <div th:if="${!requests.isEmpty()}" class="row">
+        <div th:each="carRequest : ${requests.content}" class="col-md-12">
+            <div class="car-card bg-dark text-white">
+                <div class="request-details">
+                    <p th:if="${!carRequest.brand.isBlank()}"><strong>Brand:</strong> <span
+                            th:text="${carRequest.brand}"></span></p>
+                    <p th:if="${!carRequest.model.isBlank()}"><strong>Model:</strong> <span
+                            th:text="${carRequest.model}"></span></p>
+                    <p th:if="${carRequest.year}"><strong>Year:</strong> <span
+                            th:text="${carRequest.year}"></span></p>
+                    <p th:if="${!carRequest.color.isBlank()}"><strong>Color:</strong> <span
+                            th:text="${carRequest.color}"></span></p>
+                    <p th:if="${carRequest.transmission}"><strong>Transmission:</strong> <span
+                            th:text="${carRequest.transmission}"></span></p>
+                    <p th:if="${carRequest.fuelType}"><strong>Fuel:</strong> <span
+                            th:text="${carRequest.getFuelType}"></span></p>
+                    <p th:if="${carRequest.bodyType}"><strong>Body type:</strong> <span
+                            th:text="${carRequest.getBodyType}"></span></p>
+                    <p th:if="${carRequest.engineDisplacement}"><strong>Engine displacement:</strong> <span
+                            th:text="${carRequest.engineDisplacement}"></span></p>
+                    <p th:if="${carRequest.maxMileage}"><strong>Max mileage:</strong> <span
+                            th:text="${carRequest.maxMileage}"></span></p>
+                    <p th:if="${carRequest.maxPrice}"><strong>Max price:</strong> <span
+                            th:text="${carRequest.maxPrice}"></span></p>
+                    <p th:if="${carRequest.condition}"><strong>Condition:</strong> <span
+                            th:text="${carRequest.condition}"></span></p>
+                </div>
+                <a th:href="@{/car-request/{id}(id=${carRequest.id})}" class="btn btn-outline-light">View request</a>
+            </div>
+        </div>
+    </div>
+    <div th:if="${requests.isEmpty()}">
+        <div class="no-info-block">
+            <h3 class="fw-bold text-center">You have no requests.</h3>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Pagination" th:if="${requests.totalPages > 1}" class="pagination-dark mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!requests.hasPrevious()} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/car-request/my-requests(page=${requests.number - 1}, size=${requests.size})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:if="${requests.number > 2}">
+                <a class="page-link" th:href="@{/car-request/my-requests(page=0, size=${requests.size})}"
+                   th:text="1"></a>
+            </li>
+            <li class="page-item disabled" th:if="${requests.number > 3}">
+                <a class="page-link">...</a>
+            </li>
+
+            <th:block
+                    th:each="pageNumber : ${#numbers.sequence(requests.number - 2 > 0 ? requests.number - 2 : 0,
+                    requests.number + 2 < requests.totalPages - 1 ? requests.number + 2 : requests.totalPages - 1)}">
+                <li class="page-item" th:classappend="${requests.number == pageNumber} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{/car-request/my-requests(page=${pageNumber}, size=${requests.size})}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+            </th:block>
+
+            <li class="page-item disabled" th:if="${requests.number < requests.totalPages - 3}">
+                <a class="page-link">...</a>
+            </li>
+            <li class="page-item" th:if="${requests.number < requests.totalPages - 2}">
+                <a class="page-link"
+                   th:href="@{/car-request/my-requests(page=${requests.totalPages - 1}, size=${requests.size})}"
+                   th:text="${requests.totalPages}"></a>
+            </li>
+
+            <li class="page-item" th:classappend="${!requests.hasNext()} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/car-request/my-requests(page=${requests.number + 1}, size=${requests.size})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>

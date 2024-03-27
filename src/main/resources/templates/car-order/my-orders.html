@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Car orders</title>
+</head>
+<body>
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+<div class="text-center mt-5">
+    <h2 class="fw-bold">Active car orders</h2>
+</div>
+
+<div class="mt-5 container details-card">
+    <h2>Incoming car orders</h2>
+    <div th:if="${incomingOrders.isEmpty()}" class="d-flex align-items-center justify-content-center"
+         style="min-height: 20vh">
+        <h3>You have no incoming car orders at the moment.</h3>
+    </div>
+    <table class="table table-hover" th:unless="${incomingOrders.isEmpty()}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Seller</th>
+            <th>Buyer</th>
+            <th>Car</th>
+            <th>Order Date</th>
+            <th>Order Status</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${incomingOrders}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.seller.getFullName()}"></td>
+            <td th:text="${order.buyer.getFullName()}"></td>
+            <td th:text="${order.car.brand + ' ' + order.car.model}"></td>
+            <td th:text="${order.orderDate}"></td>
+            <td th:text="${order.orderStatus}"></td>
+            <td>
+                <a th:href="@{/car-order/{id}(id=${order.id})}" class="btn btn-dark">View</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-5 container details-card">
+    <h2>Outgoing car orders</h2>
+    <div th:if="${outgoingOrders.isEmpty()}" class="d-flex align-items-center justify-content-center"
+         style="min-height: 20vh">
+        <h3>You have no outgoing car orders at the moment.</h3>
+    </div>
+    <table class="table table-hover" th:unless="${outgoingOrders.isEmpty()}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Seller</th>
+            <th>Buyer</th>
+            <th>Car</th>
+            <th>Order Date</th>
+            <th>Order Status</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${outgoingOrders}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.seller.getFullName()}"></td>
+            <td th:text="${order.buyer.getFullName()}"></td>
+            <td th:text="${order.car.brand + ' ' + order.car.model}"></td>
+            <td th:text="${order.orderDate}"></td>
+            <td th:text="${order.orderStatus}"></td>
+            <td><a th:href="@{/car-order/{id}(id=${order.id})}" class="btn btn-dark">View</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center m-auto">
+    <a class="mt-5 btn btn-dark" th:href="@{/car-order/my-orders/finished}"><i class="bi bi-archive-fill"></i> Finished
+        orders</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create car page</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<form th:method="POST" th:action="@{/car/create}" th:object="${car}" enctype="multipart/form-data"
+      class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-9">
+            <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+                    <div class="mb-md-5 mt-md-4">
+                        <h2 class="fw-bold mb-2 text-uppercase">Add new car</h2>
+                        <p class="text-white-50">Fill in the details below</p>
+                    </div>
+                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger col-6 mx-auto">
+                        <p>Please correct the following errors:</p>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="inputBrand" class="form-label">Brand</label>
+                            <input type="text" th:field="*{brand}" class="form-control" id="inputBrand">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputModel" class="form-label">Model</label>
+                            <input type="text" th:field="*{model}" class="form-control" id="inputModel">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputYear" class="form-label">Year</label>
+                            <input type="number" th:field="*{year}" class="form-control" id="inputYear">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputColor" class="form-label">Color</label>
+                            <input type="text" th:field="*{color}" class="form-control" id="inputColor">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputTransmission" class="form-label">Transmission</label>
+                            <select th:field="*{transmission}" id="inputTransmission" class="form-select">
+                                <option th:each="t : ${T(org.vitaliistf.cardealership.data.enums.Transmission).values()}"
+                                        th:value="${t}" th:text="${t}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputFuel" class="form-label">Fuel</label>
+                            <select th:field="*{fuelType}" id="inputFuel" class="form-select">
+                                <option th:each="f : ${T(org.vitaliistf.cardealership.data.enums.FuelType).values()}"
+                                        th:value="${f}" th:text="${f}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputType" class="form-label">Body type</label>
+                            <select th:field="*{bodyType}" id="inputType" class="form-select">
+                                <option th:each="ct : ${T(org.vitaliistf.cardealership.data.enums.BodyType).values()}"
+                                        th:value="${ct}" th:text="${ct}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputCondition" class="form-label">Technical condition</label>
+                            <select th:field="*{condition}" id="inputCondition" class="form-select">
+                                <option th:each="tc : ${T(org.vitaliistf.cardealership.data.enums.TechnicalCondition).values()}"
+                                        th:value="${tc}" th:text="${tc}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputMileage" class="form-label">Mileage</label>
+                            <input type="number" th:field="*{mileage}" class="form-control" id="inputMileage">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputEngineDisplacement" class="form-label">Engine displacement</label>
+                            <input type="number" step=".01" th:field="*{engineDisplacement}" class="form-control"
+                                   id="inputEngineDisplacement">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputPrice" class="form-label">Price (USD)</label>
+                            <input type="number" step=".01" th:field="*{price}" class="form-control" id="inputPrice">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="photo">Photo</label>
+                            <input class="form-control" type="file" id="photo" name="photo" accept="image/*">
+                        </div>
+                        <div class="col-12 row g-3">
+                            <label for="inputDescription" class="form-label">Description</label>
+                            <textarea th:field="*{description}" class="form-control" id="inputDescription"
+                                      rows="5"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-light btn-lg px-5 mt-4">Add new car</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

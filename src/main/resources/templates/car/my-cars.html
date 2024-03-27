@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My cars</title>
+</head>
+<body>
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">My cars</h2>
+        <a th:href="@{/car/create}" class="btn btn-dark mb-3"><i class="bi bi-plus-circle"></i> Add Car</a>
+    </div>
+    <div class="mb-3">
+        <form th:action="@{/car/my-cars}" method="get">
+            <div class="row">
+                <div class="col-md-3">
+                    <select class="form-select" name="carStatus">
+                        <option value="">All</option>
+                        <option th:each="status : ${T(org.vitaliistf.cardealership.data.enums.CarStatus).values()}"
+                                th:value="${status}"
+                                th:text="${status.name()}"
+                                th:selected="${status == carStatus}"></option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-dark"><i class="bi bi-funnel-fill"></i> Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div th:if="${!cars.isEmpty()}" class="row">
+        <!-- Thymeleaf iteration over car objects -->
+        <div th:each="car : ${cars.content}" class="col-md-4">
+            <div th:insert="~{fragments/car-card :: car-card(car=${car})}"></div>
+        </div>
+    </div>
+    <div th:if="${cars.isEmpty()}">
+        <div class="no-info-block">
+            <h3 class="fw-bold text-center">You have no cars here.</h3>
+        </div>
+    </div>
+    <nav aria-label="Pagination" th:if="${cars.totalPages > 1}" class="pagination-dark">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!cars.hasPrevious()} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/car/my-cars(page=${cars.number - 1}, size=${cars.size}, carStatus=${carStatus})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:if="${cars.number > 2}">
+                <a class="page-link" th:href="@{/car/my-cars(page=0, size=${cars.size}, carStatus=${carStatus})}"
+                   th:text="1"></a>
+            </li>
+            <li class="page-item disabled" th:if="${cars.number > 3}">
+                <a class="page-link">...</a>
+            </li>
+
+            <th:block
+                    th:each="pageNumber : ${#numbers.sequence(cars.number - 2 > 0 ? cars.number - 2 : 0,
+                    cars.number + 2 < cars.totalPages - 1 ? cars.number + 2 : cars.totalPages - 1)}">
+                <li class="page-item" th:classappend="${cars.number == pageNumber} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{/car/my-cars(page=${pageNumber}, size=${cars.size}, carStatus=${carStatus})}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+            </th:block>
+
+            <li class="page-item disabled" th:if="${cars.number < cars.totalPages - 3}">
+                <a class="page-link">...</a>
+            </li>
+            <li class="page-item" th:if="${cars.number < cars.totalPages - 2}">
+                <a class="page-link"
+                   th:href="@{/car/my-cars(page=${cars.totalPages - 1}, size=${cars.size}, carStatus=${carStatus})}"
+                   th:text="${cars.totalPages}"></a>
+            </li>
+
+            <li class="page-item" th:classappend="${!cars.hasNext()} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/car/my-cars(page=${cars.number + 1}, size=${cars.size}, carStatus=${carStatus})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

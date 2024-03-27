@@ -1,0 +1,28 @@
+CREATE TABLE car_request
+(
+    id                         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    brand                      VARCHAR(50)                                                                                       NULL,
+    brand_weight               INT                                                                                               NULL CHECK (brand_weight >= 0 and brand_weight <= 10),
+    model                      VARCHAR(50)                                                                                       NULL,
+    model_weight               INT                                                                                               NULL CHECK (model_weight >= 0 and model_weight <= 10),
+    year                       INT                                                                                               NULL,
+    year_weight                INT                                                                                               NULL CHECK (year_weight >= 0 and year_weight <= 10),
+    color                      VARCHAR(50)                                                                                       NULL,
+    color_weight               INT                                                                                               NULL CHECK (color_weight >= 0 and color_weight <= 10),
+    transmission               ENUM ('MANUAL', 'AUTOMATIC')                                                                      NULL,
+    transmission_weight        INT                                                                                               NULL CHECK (transmission_weight >= 0 and transmission_weight <= 10),
+    fuel                       ENUM ('PETROL', 'DIESEL', 'ELECTRIC', 'HYBRID', 'LPG')                                            NULL,
+    fuel_weight                INT                                                                                               NULL CHECK (fuel_weight >= 0 and fuel_weight <= 10),
+    body_type                  ENUM ('SEDAN', 'HATCHBACK', 'SUV', 'COUPE', 'CONVERTIBLE', 'WAGON', 'PICKUP', 'MINIVAN', 'SPORT') NULL,
+    body_type_weight           INT                                                                                               NULL CHECK (body_type_weight >= 0 and body_type_weight <= 10),
+    engine_displacement        DOUBLE                                                                                            NULL,
+    engine_displacement_weight INT                                                                                               NULL CHECK (engine_displacement_weight >= 0 and engine_displacement_weight <= 10),
+    max_mileage                INT                                                                                               NULL CHECK (max_mileage >= 0),
+    max_mileage_weight         INT                                                                                               NULL CHECK (max_mileage_weight >= 0 and max_mileage_weight <= 10),
+    max_price                  DOUBLE                                                                                            NULL CHECK (max_price >= 0),
+    max_price_weight           INT                                                                                               NULL CHECK (max_price_weight >= 0 and max_price_weight <= 10),
+    technical_condition        ENUM ('EXCELLENT', 'GOOD', 'FAIR', 'POOR', 'DAMAGED')                                             NULL,
+    technical_condition_weight INT                                                                                               NULL CHECK (technical_condition_weight >= 0 and technical_condition_weight <= 10),
+    user_id                    BIGINT                                                                                            NOT NULL,
+    CONSTRAINT fk_request_user FOREIGN KEY (user_id) REFERENCES app_user (id)
+);

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="navbar">
+    <meta charset="UTF-8">
+    <title>Navbar</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .navbar .nav-link {
+            color: rgb(255, 255, 255);
+        }
+        .navbar .nav-link:hover {
+            color: rgb(211, 212, 213);
+        }
+    </style>
+</head>
+<body>
+<nav th:fragment="navbar" class="navbar navbar-expand-md bg-dark sticky-top border-bottom">
+    <div class="container">
+        <ul class="navbar-nav flex-grow-1 justify-content-around align-items-center fw-bold">
+            <li class="nav-item">
+                <a class="nav-link" href="/">
+                    <i class="bi bi-ev-front"></i> Dealership
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/car">Available cars</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/car/my-cars">My cars</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/car-request/my-requests">My requests</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/car-order/my-orders">My orders</a>
+            </li>
+
+            <li class="nav-item"><a></a></li>
+
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="btn btn-light" href="/user/user-page"><i class="bi bi-person-circle"></i> Account</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <form th:action="@{/logout}" th:method="POST">
+                    <input class="btn btn-outline-light" type="submit" value="Log out"/>
+                </form>
+            </li>
+
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                <a class="btn btn-outline-light" href="/login">Log in</a>
+            </li>
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                <a class="btn btn-light" href="/register">Register</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</body>
+</html>

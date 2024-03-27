@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Car list</title>
+</head>
+<body>
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Car list</h2>
+        <button id="toggle-filter" class="btn btn-dark"><i class="bi bi-funnel-fill"></i> Filter</button>
+    </div>
+
+    <form th:action="@{/car}" method="get" id="filter-form" th:object="${filterParams}"
+          class="details-card filter-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="brand">Brand:</label>
+                <input type="text" class="form-control" id="brand" th:field="*{brand}">
+            </div>
+            <div class="form-group">
+                <label for="carModel">Model:</label>
+                <input type="text" class="form-control" id="carModel" th:field="*{carModel}">
+            </div>
+            <div class="form-group">
+                <label for="yearFrom">Year from:</label>
+                <input type="number" class="form-control" id="yearFrom" th:field="*{yearFrom}">
+            </div>
+            <div class="form-group">
+                <label for="yearTo">Year to:</label>
+                <input type="number" class="form-control" id="yearTo" th:field="*{yearTo}">
+            </div>
+            <div class="form-group">
+                <label for="color">Color:</label>
+                <input type="text" class="form-control" id="color" th:field="*{color}">
+            </div>
+            <div class="form-group">
+                <label for="engineDisplacementFrom">Engine displacement from:</label>
+                <input type="number" class="form-control" id="engineDisplacementFrom"
+                       th:field="*{engineDisplacementFrom}">
+            </div>
+            <div class="form-group">
+                <label for="engineDisplacementTo">Engine displacement to:</label>
+                <input type="number" class="form-control" id="engineDisplacementTo"
+                       th:field="*{engineDisplacementTo}">
+            </div>
+            <div class="form-group">
+                <label for="mileageFrom">Mileage from:</label>
+                <input type="number" class="form-control" id="mileageFrom" th:field="*{mileageFrom}">
+            </div>
+            <div class="form-group">
+                <label for="mileageTo">Mileage to:</label>
+                <input type="number" class="form-control" id="mileageTo" th:field="*{mileageTo}">
+            </div>
+            <div class="form-group">
+                <label for="priceFrom">Price from:</label>
+                <input type="number" class="form-control" id="priceFrom" th:field="*{priceFrom}">
+            </div>
+            <div class="form-group">
+                <label for="priceTo">Price to:</label>
+                <input type="number" class="form-control" id="priceTo" th:field="*{priceTo}">
+            </div>
+            <div class="form-group">
+                <label for="bodyType">Body type:</label>
+                <select class="form-control" id="bodyType" th:field="*{bodyType}">
+                    <option value="">Any</option>
+                    <option th:each="bodyType : ${T(org.vitaliistf.cardealership.data.enums.BodyType).values()}"
+                            th:value="${bodyType}"
+                            th:text="${bodyType.name()}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fuelType">Fuel type:</label>
+                <select class="form-control" id="fuelType" th:field="*{fuelType}">
+                    <option value="">Any</option>
+                    <option th:each="fuelType : ${T(org.vitaliistf.cardealership.data.enums.FuelType).values()}"
+                            th:value="${fuelType}"
+                            th:text="${fuelType.name()}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="transmission">Transmission:</label>
+                <select class="form-control" id="transmission" th:field="*{transmission}">
+                    <option value="">Any</option>
+                    <option th:each="transmission : ${T(org.vitaliistf.cardealership.data.enums.Transmission).values()}"
+                            th:value="${transmission}"
+                            th:text="${transmission.name()}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="condition">Technical condition:</label>
+                <select class="form-control" id="condition" th:field="*{condition}">
+                    <option value="">Any</option>
+                    <option th:each="condition : ${T(org.vitaliistf.cardealership.data.enums.TechnicalCondition).values()}"
+                            th:value="${condition}"
+                            th:text="${condition.name()}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="sortBy">Sort By:</label>
+                <select class="form-control" id="sortBy" th:field="*{sortBy}">
+                    <option value="id">ID</option>
+                    <option value="brand">Brand</option>
+                    <option value="model">Model</option>
+                    <option value="year">Year</option>
+                    <option value="price">Price</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sortOrder">Sort order:</label>
+                <select class="form-control" id="sortOrder" th:field="*{sortOrder}">
+                    <option value="ASC">Ascending</option>
+                    <option value="DESC">Descending</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="size">Results per page:</label>
+                <select class="form-control" id="size" th:field="*{size}">
+                    <option value="12">12</option>
+                    <option value="24">24</option>
+                    <option value="57">57</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="form-group">
+                <button type="submit" class="btn btn-dark">Filter & sort</button>
+            </div>
+        </div>
+    </form>
+
+    <div th:if="${!cars.isEmpty()}" class="row">
+        <div th:each="car : ${cars.content}" class="col-md-4">
+            <div th:insert="~{fragments/car-card :: car-card(car=${car})}"></div>
+        </div>
+    </div>
+    <div th:if="${cars.isEmpty()}">
+        <div class="no-info-block">
+            <h3 class="fw-bold text-center">Unfortunately, there are no cars found.</h3>
+        </div>
+    </div>
+
+    <nav aria-label="Pagination" th:if="${cars.totalPages > 1}" class="pagination-dark">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!cars.hasPrevious()} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/car(page=${cars.number - 1},
+                       size=${filterParams.size},
+                       sort=${filterParams.sortBy + ',' + filterParams.sortOrder},
+                       brand=${filterParams.brand},
+                       carModel=${filterParams.carModel},
+                       yearFrom=${filterParams.yearFrom},
+                       yearTo=${filterParams.yearTo},
+                       bodyType=${filterParams.bodyType},
+                       fuelType=${filterParams.fuelType},
+                       transmission=${filterParams.transmission},
+                       condition=${filterParams.condition},
+                       color=${filterParams.color},
+                       engineDisplacementFrom=${filterParams.engineDisplacementFrom},
+                       engineDisplacementTo=${filterParams.engineDisplacementTo},
+                       mileageFrom=${filterParams.mileageFrom},
+                       mileageTo=${filterParams.mileageTo},
+                       priceFrom=${filterParams.priceFrom},
+                       priceTo=${filterParams.priceTo})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:if="${cars.number > 2}">
+                <a class="page-link"
+                   th:href="@{/car(page=0, size=${filterParams.size},
+                       sort=${filterParams.sortBy + ',' + filterParams.sortOrder},
+                       brand=${filterParams.brand},
+                       carModel=${filterParams.carModel},
+                       yearFrom=${filterParams.yearFrom},
+                       yearTo=${filterParams.yearTo},
+                       bodyType=${filterParams.bodyType},
+                       fuelType=${filterParams.fuelType},
+                       transmission=${filterParams.transmission},
+                       condition=${filterParams.condition},
+                       color=${filterParams.color},
+                       engineDisplacementFrom=${filterParams.engineDisplacementFrom},
+                       engineDisplacementTo=${filterParams.engineDisplacementTo},
+                       mileageFrom=${filterParams.mileageFrom},
+                       mileageTo=${filterParams.mileageTo},
+                       priceFrom=${filterParams.priceFrom},
+                       priceTo=${filterParams.priceTo})}"
+                   th:text="1"></a>
+            </li>
+            <li class="page-item disabled" th:if="${cars.number > 3}">
+                <a class="page-link">...</a>
+            </li>
+
+            <th:block
+                    th:each="pageNumber : ${#numbers.sequence(cars.number - 2 > 0 ? cars.number - 2 : 0,
+                        cars.number + 2 < cars.totalPages - 1 ? cars.number + 2 : cars.totalPages - 1)}">
+                <li class="page-item" th:classappend="${cars.number == pageNumber} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{/car(page=${pageNumber}, size=${filterParams.size},
+                           sort=${filterParams.sortBy + ',' + filterParams.sortOrder},
+                           brand=${filterParams.brand},
+                           carModel=${filterParams.carModel},
+                           yearFrom=${filterParams.yearFrom},
+                           yearTo=${filterParams.yearTo},
+                           bodyType=${filterParams.bodyType},
+                           fuelType=${filterParams.fuelType},
+                           transmission=${filterParams.transmission},
+                           condition=${filterParams.condition},
+                           color=${filterParams.color},
+                           engineDisplacementFrom=${filterParams.engineDisplacementFrom},
+                           engineDisplacementTo=${filterParams.engineDisplacementTo},
+                           mileageFrom=${filterParams.mileageFrom},
+                           mileageTo=${filterParams.mileageTo},
+                           priceFrom=${filterParams.priceFrom},
+                           priceTo=${filterParams.priceTo})}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+            </th:block>
+
+            <li class="page-item disabled" th:if="${cars.number < cars.totalPages - 3}">
+                <a class="page-link">...</a>
+            </li>
+            <li class="page-item" th:if="${cars.number < cars.totalPages - 2}">
+                <a class="page-link"
+                   th:href="@{/car(page=${cars.totalPages - 1}, size=${filterParams.size},
+                       sort=${filterParams.sortBy + ',' + filterParams.sortOrder},
+                       brand=${filterParams.brand},
+                       carModel=${filterParams.carModel},
+                       yearFrom=${filterParams.yearFrom},
+                       yearTo=${filterParams.yearTo},
+                       bodyType=${filterParams.bodyType},
+                       fuelType=${filterParams.fuelType},
+                       transmission=${filterParams.transmission},
+                       condition=${filterParams.condition},
+                       color=${filterParams.color},
+                       engineDisplacementFrom=${filterParams.engineDisplacementFrom},
+                       engineDisplacementTo=${filterParams.engineDisplacementTo},
+                       mileageFrom=${filterParams.mileageFrom},
+                       mileageTo=${filterParams.mileageTo},
+                       priceFrom=${filterParams.priceFrom},
+                       priceTo=${filterParams.priceTo})}"
+                   th:text="${cars.totalPages}"></a>
+            </li>
+
+            <li class="page-item" th:classappend="${!cars.hasNext()} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/car(page=${cars.number + 1}, size=${filterParams.size},
+                       sort=${filterParams.sortBy + ',' + filterParams.sortOrder},
+                       brand=${filterParams.brand},
+                       carModel=${filterParams.carModel},
+                       yearFrom=${filterParams.yearFrom},
+                       yearTo=${filterParams.yearTo},
+                       bodyType=${filterParams.bodyType},
+                       fuelType=${filterParams.fuelType},
+                       transmission=${filterParams.transmission},
+                       condition=${filterParams.condition},
+                       color=${filterParams.color},
+                       engineDisplacementFrom=${filterParams.engineDisplacementFrom},
+                       engineDisplacementTo=${filterParams.engineDisplacementTo},
+                       mileageFrom=${filterParams.mileageFrom},
+                       mileageTo=${filterParams.mileageTo},
+                       priceFrom=${filterParams.priceFrom},
+                       priceTo=${filterParams.priceTo})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        const filterForm = document.getElementById('filter-form');
+        const toggleFilter = document.getElementById('toggle-filter');
+
+        filterForm.style.display = 'none';
+
+        toggleFilter.addEventListener('click', function () {
+            if (filterForm.style.display === 'none') {
+                filterForm.style.display = 'flex';
+            } else {
+                filterForm.style.display = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="car-card">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="car-card (car)" class="car-card bg-dark text-white">
+    <div class="photo-container mb-2">
+        <img th:if="${car.photoUrl != null}" th:src="@{/car/{id}/photo(id=${car.id})}" alt="Car Photo">
+        <h3 th:if="${car.photoUrl == null}"><strong><i class="bi bi-camera"></i> This car has no photo.</strong></h3>
+        <div th:if="${car.status.toString() == 'ARCHIVED'}" class="archived-warning">
+            Archived
+        </div>
+        <div th:if="${car.status.toString() == 'ORDERED'}" class="ordered-warning">
+            Ordered
+        </div>
+    </div>
+    <h3 th:text="${car.brand + ' ' + car.model + ' ' + car.year}"></h3>
+    <div class="mt-3 car-details">
+        <p><strong>Mileage:</strong> <span th:text="${car.mileage}"></span></p>
+        <p><strong>Transmission:</strong> <span th:text="${car.transmission}"></span></p>
+        <p><strong>Fuel:</strong> <span th:text="${car.fuelType}"></span></p>
+    </div>
+    <a th:href="@{/car/{id}(id=${car.id})}" class="btn btn-outline-light"><i class="bi bi-eye-fill"></i> View
+        Details</a>
+</div>
+</body>
+</html>
