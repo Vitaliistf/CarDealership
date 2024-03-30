@@ -56,7 +56,7 @@
 - Java 21
 - Spring Boot 3.2.3 (Web, Data, Security)
 - Thymeleaf
-- HTML, CSS, JS
+- HTML, CSS, JS, Bootstrap
 - Liquibase
 - MySQL
 - Lombok
